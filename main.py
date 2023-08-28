@@ -130,7 +130,6 @@ html = """
 
 """
 
-
 soup = BeautifulSoup(html, 'html.parser')
 
 schedule = {}
@@ -149,25 +148,14 @@ for row in rows:
     time = columns[0].find('span', class_='SSSTEXTWEEKLYTIME').text
 
     # Initialize the schedule for the current time slot
-    schedule[time] = {
-        "Monday": [],
-        "Tuesday": [],
-        "Wednesday": [],
-        "Thursday": [],
-        "Friday": []
-    }
+    schedule[time] = []
 
     # Extract class information for each day
     for i in range(1, len(columns)):
         class_info = columns[i].find('span', class_='SSSTEXTWEEKLY')
         if class_info:
             classes = [class_.strip() for class_ in class_info.text.split('<hr>')]
-            day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"][i - 1]
-            schedule[time][day] = classes
+            schedule[time].append(classes)
 
-# Print the parsed schedule
-for time, classes in schedule.items():
-    print(f"{time}:")
-    for day, class_list in classes.items():
-        if class_list:
-            print(f"  {day}: {', '.join(class_list)}")
+# Print the parsed schedule dictionary
+print(schedule)
